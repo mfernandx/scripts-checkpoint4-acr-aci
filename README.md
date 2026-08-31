@@ -151,11 +151,11 @@ az account show
 Clone os dois repositórios:
 
 ```bash
-git clone LINK_DO_REPOSITORIO_DA_API
+git clone https://github.com/mfernandx/api-catalogo-filmes-dotnet.git
 ```
 
 ```bash
-git clone LINK_DO_REPOSITORIO_DO_MYSQL
+git clone https://github.com/mfernandx/mysql-catalogofilmes.git
 ```
 
 ---
@@ -451,11 +451,11 @@ curl -X GET http://FQDN_DA_API:8080/api/filme/1
 curl -X POST http://FQDN_DA_API:8080/api/filme \
   -H "Content-Type: application/json" \
   -d '{
-    "titulo": "Interestelar",
-    "descricao": "Uma equipe viaja pelo espaço em busca de um novo lar para a humanidade.",
-    "genero": "Ficcao Cientifica",
-    "duracaoMinutos": 169,
-    "dataLancamento": "2014-11-06"
+    "titulo": "Oppenheimer",
+    "descricao": "A historia do cientista responsavel pelo desenvolvimento da primeira bomba atomica.",
+    "genero": "Drama",
+    "duracaoMinutos": 180,
+    "dataLancamento": "2023-07-21"
   }'
 ```
 
@@ -472,22 +472,22 @@ curl -X GET http://FQDN_DA_API:8080/api/filme
 Utilizando o `id` retornado pelo POST:
 
 ```bash
-curl -X PUT http://FQDN_DA_API:8080/api/filme/6 \
+curl -X PUT http://FQDN_DA_API:8080/api/filme/8 \
   -H "Content-Type: application/json" \
   -d '{
-    "id": 6,
-    "titulo": "Interestelar - Alterado",
-    "descricao": "Descricao alterada do filme.",
-    "genero": "Ficcao Cientifica",
-    "duracaoMinutos": 170,
-    "dataLancamento": "2014-11-06"
+    "id": 8,
+    "titulo": "Oppenheimer - Versao Atualizada",
+    "descricao": "Filme sobre a vida e o trabalho de J. Robert Oppenheimer.",
+    "genero": "Drama",
+    "duracaoMinutos": 190,
+    "dataLancamento": "2023-07-21"
   }'
 ```
 
 Depois, verificar:
 
 ```bash
-curl -X GET http://FQDN_DA_API:8080/api/filme/6
+curl -X GET http://FQDN_DA_API:8080/api/filme/8
 ```
 
 ---
@@ -495,79 +495,13 @@ curl -X GET http://FQDN_DA_API:8080/api/filme/6
 ## DELETE — Excluir filme
 
 ```bash
-curl -X DELETE http://FQDN_DA_API:8080/api/filme/6
+curl -X DELETE http://FQDN_DA_API:8080/api/filme/8
 ```
 
 Depois, confirmar a exclusão:
 
 ```bash
 curl -X GET http://FQDN_DA_API:8080/api/filme
-```
-
----
-
-# 🧾 Testes CRUD diretamente no MySQL
-
-Além dos testes realizados pela API, as operações CRUD também podem ser verificadas diretamente no banco de dados.
-
-## SELECT — Consultar registros
-
-```sql
-SELECT * FROM filmes;
-```
-
-## INSERT
-
-```sql
-INSERT INTO filmes
-(titulo, descricao, genero, duracao_minutos, data_lancamento)
-VALUES
-(
-    'Interestelar',
-    'Uma equipe viaja pelo espaço em busca de um novo lar para a humanidade.',
-    'Ficcao Cientifica',
-    169,
-    '2014-11-06'
-);
-```
-
-Confirmar:
-
-```sql
-SELECT * FROM filmes;
-```
-
----
-
-## UPDATE
-
-```sql
-UPDATE filmes
-SET duracao_minutos = 170
-WHERE titulo = 'Interestelar';
-```
-
-Confirmar:
-
-```sql
-SELECT * FROM filmes
-WHERE titulo = 'Interestelar';
-```
-
----
-
-## DELETE
-
-```sql
-DELETE FROM filmes
-WHERE titulo = 'Interestelar';
-```
-
-Confirmar:
-
-```sql
-SELECT * FROM filmes
-WHERE titulo = 'Interestelar';
 ```
 
 ---
