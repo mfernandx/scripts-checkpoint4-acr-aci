@@ -342,36 +342,39 @@ az container list \
 
 # 🗄️ Testando o MySQL na nuvem
 
-É possível verificar as informações do ACI MySQL:
+Para acessar o MySQL que está sendo executado no Azure Container Instance (ACI), utilize o Azure CLI:
 
 ```bash
-az container show \
+az container exec \
   --resource-group rg-catalogo-filmes \
   --name rm565277-mysql-catalogofilmes \
-  --query "ipAddress.{IP:ip,FQDN:fqdn,Portas:ports}" \
-  --output json
+  --exec-command "mysql -uuser-catalogofilmes -psenha-catalogofilmes"
 ```
 
-Também é possível verificar os logs:
+Depois de conectar, selecione o banco:
 
 ```bash
-az container logs \
-  --resource-group rg-catalogo-filmes \
-  --name rm565277-mysql-catalogofilmes
+USE db-catalogofilmes;
+```
+
+E consulte os registros:
+
+```bash
+SELECT * FROM filmes;
 ```
 
 ---
 
 # 🌐 Testando a API .NET na nuvem
 
-Para obter o endereço público da API:
+Para obter o FQDN da API:
 
 ```bash
-az container show \
+fqdndotnet=$(az container show \
   --resource-group rg-catalogo-filmes \
   --name rm565277-api-catalogofilmes \
   --query ipAddress.fqdn \
-  --output tsv
+  --output tsv)
 ```
 
 A API utiliza a porta:
@@ -395,13 +398,13 @@ Substitua `FQDN_DA_API` pelo endereço retornado pelo Azure.
 ## GET — Listar filmes
 
 ```bash
-curl -X GET http://FQDN_DA_API:8080/api/filme
+curl -X GET http://$fqdndotnet:8080/api/filme
 ```
 
 ## GET — Buscar filme por ID
 
 ```bash
-curl -X GET http://FQDN_DA_API:8080/api/filme/1
+curl -X GET http://$fqdndotnet:8080/api/filme/1
 ```
 
 ---
@@ -409,7 +412,7 @@ curl -X GET http://FQDN_DA_API:8080/api/filme/1
 ## POST — Inserir filme
 
 ```bash
-curl -X POST http://FQDN_DA_API:8080/api/filme \
+curl -X POST http://$fqdndotnet:8080/api/filme \
   -H "Content-Type: application/json" \
   -d '{
     "titulo": "Oppenheimer",
@@ -423,7 +426,7 @@ curl -X POST http://FQDN_DA_API:8080/api/filme \
 Após o POST, pode ser realizado um GET para verificar o novo registro:
 
 ```bash
-curl -X GET http://FQDN_DA_API:8080/api/filme
+curl -X GET http://$fqdndotnet:8080/api/filme
 ```
 
 ---
@@ -433,7 +436,7 @@ curl -X GET http://FQDN_DA_API:8080/api/filme
 Utilizando o `id` retornado pelo POST:
 
 ```bash
-curl -X PUT http://FQDN_DA_API:8080/api/filme/8 \
+curl -X PUT http://$fqdndotnet:8080/api/filme/8 \
   -H "Content-Type: application/json" \
   -d '{
     "id": 8,
@@ -448,7 +451,7 @@ curl -X PUT http://FQDN_DA_API:8080/api/filme/8 \
 Depois, verificar:
 
 ```bash
-curl -X GET http://FQDN_DA_API:8080/api/filme/8
+curl -X GET http://$fqdndotnet:8080/api/filme/8
 ```
 
 ---
@@ -456,13 +459,13 @@ curl -X GET http://FQDN_DA_API:8080/api/filme/8
 ## DELETE — Excluir filme
 
 ```bash
-curl -X DELETE http://FQDN_DA_API:8080/api/filme/8
+curl -X DELETE http://$fqdndotnet:8080/api/filme/8
 ```
 
 Depois, confirmar a exclusão:
 
 ```bash
-curl -X GET http://FQDN_DA_API:8080/api/filme
+curl -X GET http://$fqdndotnet:8080/api/filme
 ```
 
 ---
