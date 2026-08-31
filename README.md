@@ -342,14 +342,25 @@ az container list \
 
 # 🗄️ Testando o MySQL na nuvem
 
-Para acessar o MySQL que está sendo executado no Azure Container Instance (ACI), utilize o Azure CLI:
+Para acessar o MySQL que está sendo executado no Azure Container Instance (ACI), primeiro obtenha seu FQDN:
 
 ```bash
-az container exec \
+fqdnmysql=$(az container show \
   --resource-group rg-catalogo-filmes \
   --name rm565277-mysql-catalogofilmes \
-  --exec-command "mysql -uuser-catalogofilmes -psenha-catalogofilmes"
+  --query ipAddress.fqdn \
+  --output tsv)
 ```
+
+Com o FQDN armazenado na variável, é possível utilizar o cliente MySQL:
+
+```bash
+mysql -h $fqdnmysql \
+  -P 3306 \
+  -u user-catalogofilmes \
+  -p
+```
+Após executar o comando, informe a senha do usuário quando solicitado.
 
 Depois de conectar, selecione o banco:
 
@@ -393,7 +404,7 @@ A rota principal para filmes é:
 
 # 🔄 Testes CRUD da API
 
-Substitua `FQDN_DA_API` pelo endereço retornado pelo Azure.
+Alguns exemplos de operações CRUD para testar na API são:.
 
 ## GET — Listar filmes
 
