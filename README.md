@@ -46,45 +46,6 @@ A API utiliza **Entity Framework Core** para comunicação com o banco de dados 
 
 ---
 
-## 🏗️ Arquitetura da solução
-
-A solução possui dois containers principais:
-
-```text
-                    ┌──────────────────────────┐
-                    │       Azure ACR          │
-                    │                          │
-                    │  Imagem API .NET         │
-                    │  Imagem MySQL            │
-                    └────────────┬─────────────┘
-                                 │
-                    ┌────────────┴─────────────┐
-                    │                          │
-                    ▼                          ▼
-          ┌─────────────────┐        ┌─────────────────┐
-          │      ACI        │        │      ACI        │
-          │   API .NET      │───────▶│     MySQL       │
-          │                 │        │                 │
-          │ Porta 8080      │        │ Porta 3306      │
-          └─────────────────┘        └────────┬────────┘
-                                               │
-                                               ▼
-                                      ┌─────────────────┐
-                                      │ Azure Storage   │
-                                      │   File Share    │
-                                      │                 │
-                                      │ Persistência    │
-                                      │ dos dados       │
-                                      └─────────────────┘
-
-                         Azure Key Vault
-                    ─────────────────────────
-                    Credenciais e dados
-                       sensíveis
-```
-
----
-
 ## 📂 Repositórios
 
 O projeto foi dividido em dois repositórios no GitHub:
